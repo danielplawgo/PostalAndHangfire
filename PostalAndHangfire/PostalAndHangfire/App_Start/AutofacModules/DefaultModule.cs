@@ -10,6 +10,8 @@ namespace PostalAndHangfire.App_Start.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterAssemblyTypes(typeof(DefaultModule).Assembly);
+
             builder.RegisterAssemblyTypes(typeof(DefaultModule).Assembly)
                 .AsImplementedInterfaces();
         }

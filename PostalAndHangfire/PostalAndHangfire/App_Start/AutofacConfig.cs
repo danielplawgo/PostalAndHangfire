@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Hangfire;
 
 namespace PostalAndHangfire
 {
@@ -18,6 +19,8 @@ namespace PostalAndHangfire
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            GlobalConfiguration.Configuration.UseAutofacActivator(container, false);
 
             return container;
         }
