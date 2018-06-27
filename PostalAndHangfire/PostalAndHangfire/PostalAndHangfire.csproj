@@ -186,10 +186,12 @@
     </Compile>
     <Compile Include="Mailer\BaseMailer.cs" />
     <Compile Include="Logics\UserLogic.cs" />
+    <Compile Include="Mailer\EmailServiceFactory.cs" />
     <Compile Include="Mailer\UsersMailer.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Profiles\UsersProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\HostingEnviromentService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Users\RegisterEmail.cs" />
     <Compile Include="ViewModels\Users\UserViewModel.cs" />

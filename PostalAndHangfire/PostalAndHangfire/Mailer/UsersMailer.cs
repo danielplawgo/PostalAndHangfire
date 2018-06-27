@@ -4,12 +4,18 @@ using System.Linq;
 using System.Web;
 using Postal;
 using PostalAndHangfire.Models;
+using PostalAndHangfire.Services;
 using PostalAndHangfire.ViewModels.Users;
 
 namespace PostalAndHangfire.Mailer
 {
     public class UsersMailer : BaseMailer, IUserMailer
     {
+        public UsersMailer(Lazy<IEmailServiceFactory> emailServiceFactory) 
+            : base(emailServiceFactory)
+        {
+        }
+
         public void SendRegisterEmail(User user)
         {
             var email = new RegisterEmail()

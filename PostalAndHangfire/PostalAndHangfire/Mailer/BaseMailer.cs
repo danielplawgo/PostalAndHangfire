@@ -6,47 +6,29 @@ using System.Reflection;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Postal;
+using PostalAndHangfire.Services;
 
 namespace PostalAndHangfire.Mailer
 {
     public class BaseMailer
     {
-        protected void Send(Email email)
+        private Lazy<IEmailServiceFactory> _emailServiceFactory;
+
+        protected IEmailServiceFactory EmailServiceFactory
         {
-            var mailerName = GetType().Name.Replace("Mailer", string.Empty);
-
-            var viewsPath = Path.GetFullPath(string.Format(HostingEnvironment.MapPath(@"~/Views/Emails/{0}"), mailerName));
-            var engines = new ViewEngineCollectionWithoutResolver();
-            engines.Add(new FileSystemRazorViewEngine(viewsPath));
-
-            var emailService = new EmailService(engines);
-
-            emailService.Send(email);
+            get { return _emailServiceFactory.Value; }
         }
 
-        private class ViewEngineCollectionWithoutResolver : ViewEngineCollection
+        public BaseMailer(Lazy<IEmailServiceFactory> emailServiceFactory)
         {
-            public ViewEngineCollectionWithoutResolver()
-            {
-                var resolverField = typeof(ViewEngineCollection).GetField("_dependencyResolver",
-                    BindingFlags.NonPublic | BindingFlags.Instance);
+            _emailServiceFactory = emailServiceFactory;
+        }
 
-                var resolver = new EmptyResolver();
-                resolverField.SetValue(this, resolver);
-            }
+        protected void Send(Email email)
+        {
+            var emailService = EmailServiceFactory.Create(GetType());
 
-            private class EmptyResolver : IDependencyResolver
-            {
-                public object GetService(Type serviceType)
-                {
-                    return null;
-                }
-
-                public IEnumerable<object> GetServices(Type serviceType)
-                {
-                    return Enumerable.Empty<object>();
-                }
-            }
+            emailService.Send(email);
         }
     }
 }
